@@ -1,0 +1,9 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      button.close data-dismiss="modal" &times;
+      h4.modal-title Media Authorization Request
+    .modal-body
+      p You need to request authorization from #{ @object_type } owner
+    .modal-footer
+      a.btn.btn-primary.request Create Request

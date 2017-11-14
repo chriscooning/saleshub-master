@@ -1,0 +1,12 @@
+.col-md-12
+  .page-header
+    h1 Resources
+
+  .container-fluid
+    .row
+      .table-responsive
+        table.table.table-striped.table-condensed
+          tbody
+            - @galleries.each do |gallery|
+              tr
+                td= link_to gallery.name, gallery_path(gallery.id)

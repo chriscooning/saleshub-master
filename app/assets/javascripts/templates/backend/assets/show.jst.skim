@@ -1,0 +1,17 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      button.close data-dismiss="modal" &times;
+      h4.modal-title = @title
+    .modal-body.asset-modal
+      .asset-preview
+        - if @is_image
+          img src="#{@medium_url}"
+        - else if @is_video
+          #clipplayer Loading the player...
+        - else if @is_pdf
+          = @safe JST["templates/shared/assets/_pdf"](url: @pdf_preview_url)
+      .asset-description == @description
+    - if !!@downloadable
+      .modal-footer
+        a.download.btn.btn-success href="#{@file_url}" Download

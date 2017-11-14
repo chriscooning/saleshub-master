@@ -1,0 +1,28 @@
+li id="news-entry-#{@entry.id}"
+  .timeline-panel
+    .timeline-heading
+      h4.news-title
+        / TODO Implement ACL for javascript
+        /- if enable_actions
+          small.pull-right
+            - if @entry.is_internal
+              - if can?(:access, Action.new(:news, :edit))
+                = link_to 'Edit', edit_news_path(news_entry), class: 'text-warning'
+              - if can?(:access, Action.new(:news, :delete))
+                '  |
+                = link_to 'Delete', news_path(news_entry), method: :delete, class: 'text-danger'
+        - if @entry.is_external
+          a href=@entry.link target="_blank" = @entry.title
+        - else
+          a href="/news/#{@entry.id}" = @entry.title
+    .timeline-body
+      - if @entry.is_external && @entry.image_url
+        .attached-image
+          a href=@entry.link target="_blank"
+            img.img-thumbnail src=@entry.image_url
+
+      p = @entry.preview
+      p.timestamp
+        span.date.text-muted.small
+          i.glyphicon.glyphicon-time
+          '  #{@entry.published_at}

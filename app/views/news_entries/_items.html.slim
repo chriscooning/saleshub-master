@@ -1,0 +1,5 @@
+ruby:
+  enable_actions ||= false
+
+- news_entries.each do |news_entry|
+  = render partial: 'news_entries/item', locals: { news_entry: news_entry, enable_actions: enable_actions }

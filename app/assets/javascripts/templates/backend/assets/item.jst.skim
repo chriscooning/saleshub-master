@@ -1,0 +1,35 @@
+.panel.panel-default
+  .panel-body
+    .row.asset-preview
+      - if @processed && (@is_video || @is_image)
+        a href="#!assets/#{@id}"
+          img src="#{@thumb_url}" width="220"
+      - else if @is_image && !@processed
+          img src="#{@file_url}" width="220"
+      - else if @is_video && !@processed
+        .processing.text-center
+          span.glyphicon.glyphicon-refresh
+      - else
+        .document-block.text-center
+          a href="#!assets/#{@id}"
+            span.glyphicon.glyphicon-file
+    .asset-details.row.with-title.with-description
+      .asset-title
+        =' @title
+        - if @is_video && !@processed
+          span.label.label-info Processing
+        - if @is_image && !@processed
+          span.label.label-info Preparing Thumbnails
+      .asset-description
+        == @description
+    .row
+      - if @processed
+        a.btn.btn-primary.pull-left href="#!assets/#{@id}" View
+      .dropdown.pull-right
+        .btn data-toggle="dropdown"
+          span.glyphicon.glyphicon-cog
+        ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"
+          li
+            a href="#{@file_url}"
+              span.glyphicon.glyphicon-download-alt
+              |  Download

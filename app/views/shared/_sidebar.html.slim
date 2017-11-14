@@ -1,0 +1,31 @@
+.col-md-2.hidden-sm.sidebar
+  ul.nav.nav-sidebar.stuck
+    li#dashboard
+      = link_to root_path, id: 'dashboard', title:'Dashboard' do
+        span.glyphicon.glyphicon-dashboard
+        span.sans-serif  Dashboard
+      ul.sub-nav.nav
+        = navigation_link_to messages_path, title: 'Customer Messaging' do
+          span.glyphicon.glyphicon-envelope
+          span.sans-serif  Customer Messaging
+        = navigation_link_to briefings_path, title: 'Briefings' do
+          span.glyphicon.glyphicon-envelope
+          span.sans-serif  Briefings
+        /= navigation_link_to whats_ups_path, title: "What's Up" do
+          span.glyphicon.glyphicon-envelope
+          span.sans-serif  What's Up
+        /= navigation_link_to surveys_path, id: 'surveys', title: 'Survey' do
+          span.glyphicon.glyphicon-pencil
+          span.sans-serif  Survey
+        = navigation_link_to internal_news_index_path, id: 'internal-news', title: 'TF News' do
+          span.glyphicon.glyphicon-book
+          span.sans-serif  TF News
+        = navigation_link_to external_news_index_path, id: 'external-news', title: 'Industry News' do
+          span.glyphicon.glyphicon-book
+          span.sans-serif  Industry News
+    = navigation_link_to resources_path, id: 'resources', title: 'Resources' do
+      span.glyphicon.glyphicon-wrench
+      span.sans-serif  Resources
+    /= navigation_link_to '#', id: 'calculators', title: 'Calculators' do
+      span.glyphicon.glyphicon-tasks
+      span.sans-serif  Calculators

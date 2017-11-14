@@ -1,0 +1,33 @@
+.panel.panel-default
+  .panel-body
+    .row.asset-preview
+      - if @is_processed && (@is_video || @is_image)
+        a href="#!assets/#{@id}"
+          img src="#{@thumb_url}" width="220"
+      - else if !@is_processed && (@is_video || @is_tiff)
+        .processing.text-center
+          span.glyphicon.glyphicon-refresh
+      - else if !@is_processed && @is_image
+        img src="#{@file_url}" width="220"
+      - else
+        .document-block.text-center
+          a href="#!assets/#{@id}"
+            - if @type_icon_url
+              img.filetype-icon src="#{@type_icon_url}"
+            - else
+              span.glyphicon.glyphicon-file
+
+    - visible_classes = ''
+    - if @is_title_visible
+      - visible_classes += 'with-title '
+    - if @is_description_visible
+      - visible_classes += 'with-description '
+    .asset-details.row class=(visible_classes)
+      - if @is_title_visible
+        .asset-title
+          = @title
+      - if @is_description_visible
+        .asset-description
+          == @description
+    .row
+      a.btn.btn-primary.pull-left href="#!assets/#{@id}" View

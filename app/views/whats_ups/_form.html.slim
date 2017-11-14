@@ -1,0 +1,10 @@
+ruby:
+  message ||= Message.new
+= simple_form_for message, url: whats_ups_path, html: { role: 'form' } do |f|
+  .form-group
+    = f.input :title, as: :string, input_html: { class: 'form-control' }
+  .form-group
+    = f.label :body
+    = f.bootsy_area :body, editor_options: { alert_unsaved: false }, class: 'form-control', rows: '7'
+  .form-group
+    = f.submit 'Send it!', class: 'button btn btn-large btn-success'

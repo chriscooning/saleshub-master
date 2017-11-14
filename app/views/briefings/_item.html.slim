@@ -1,0 +1,26 @@
+- msg_class = is_even ? "" : "timeline-inverted"
+li class="#{msg_class}" id="message-#{msg.id}" data-id=msg.id
+  .timeline-panel
+    .timeline-heading
+      = link_to briefing_path(msg) do
+        h4.timeline-title= msg.title
+    .timeline-body
+      - if msg.gallery.present? && msg.gallery.images.present?
+        ruby:
+          primary = msg.gallery.images.first
+          secondary = msg.gallery.images.to_a.from(1)
+        .attached-image
+          = link_to primary.file.url, target: :blank, class: 'fancybox', rel: "message-#{msg.id}-gallery" do
+            = image_tag primary.file.thumbnail.url, class: 'img-thumbnail'
+          - secondary.each do |image|
+            = link_to image.file.url, target: :blank, class: 'fancybox hide', rel: "message-#{msg.id}-gallery" do
+              = image_tag image.file.thumbnail.url, class: 'img-thumbnail'
+      .target-blank
+        = msg.body
+      p.timestamp
+        small.text-muted
+          i.glyphicon.glyphicon-time
+          =' msg.created_at_formatted
+          - unless msg.is_anonymous?
+            ' by
+            = msg.author_name

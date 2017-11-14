@@ -1,0 +1,26 @@
+.page-header
+  h1 Surveys
+
+.table-responsive
+  table.table.table-striped
+    thead
+      tr
+        th ID
+        th Customer
+        th Last Interaction Rating
+        th Description
+    tbody
+      - @surveys.each do |survey|
+        tr
+          td= survey.formatted_id
+          td= survey.customer_name
+          td
+            - rating = survey.last_interaction_rating
+            - rating.times do
+              span class="glyphicon glyphicon-star-empty glyphicon-star"
+            - if rating > 0
+              | (#{rating})
+            - else
+              | 0
+          td= survey.summary
+= paginate @surveys

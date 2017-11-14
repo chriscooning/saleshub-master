@@ -1,0 +1,13 @@
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: #eee8df;
+  min-height: 40px;
+  line-height: 40px;
+  font-size: 12px;
+  .col-md-2 {
+    min-height: 40px;
+    background: #DBD6CD;
+  }
+}

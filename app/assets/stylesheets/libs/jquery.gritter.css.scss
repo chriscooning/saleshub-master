@@ -1,0 +1,24 @@
+#gritter-notice-wrapper {
+  top: 70px;
+  .gritter-item {
+    border-radius: 0;
+    border: 0;
+    padding: 5px 10px;
+  }
+  .gritter-close {
+    background: transparent;
+    left: auto;
+    top: 1px;
+    right: 1px;
+    background: #000;
+    color: #fff;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    line-height: 18px;
+    display: block !important;
+    &:after {
+      content: 'x';
+    }
+  }
+}

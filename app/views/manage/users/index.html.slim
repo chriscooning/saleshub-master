@@ -1,0 +1,43 @@
+.col-md-12
+  .page-header
+    h1 Users
+
+  .container-fluid
+    .row
+      .table-responsive
+        table.table.table-striped.table-condensed
+          thead
+            tr
+              th Name
+              th Email
+              th Role
+              th Activity status
+              th.text-right = link_to 'Sign Up User', new_manage_user_path, class: 'btn btn-xs btn-primary'
+          tbody
+            - @users.each do |user|
+              tr
+                td= user.name
+                td= user.email
+                td
+                  .label.label-primary
+                    = user.role.presentation.upcase
+                td
+                  .label.label-primary
+                    = user.status_name.upcase
+                td
+                  .btn-group
+                    button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" Actions
+                    ul.dropdown-menu
+                      - if can? :deactivate, user
+                        li = link_to 'Deactivate', deactivate_manage_user_path(user), method: :put
+                      - elsif can? :activate, user
+                        li = link_to 'Activate', activate_manage_user_path(user), method: :put
+                      li
+                        = link_to 'Delete', manage_user_path(user), method: :delete, data: { confirm: %Q(Are you sure you want to delete the user "#{user.email}"?) }
+                      - unless user.is_admin?
+                        li
+                          = link_to 'Edit', edit_manage_user_path(user)
+                        li
+                          = link_to 'Permissions', edit_manage_user_permissions_path(user)
+
+      = paginate @users

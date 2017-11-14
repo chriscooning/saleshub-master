@@ -1,0 +1,36 @@
+.form-group {
+  .error {
+    color: red;
+  }
+}
+
+.home-header {
+  margin-left:0px;
+  margin-right:0px;
+  background-color:#eee8df;
+}
+
+.home-section {
+  margin-top:35px;
+  margin-bottom:35px;
+  border-top:1px solid #ADADAD;
+}
+
+.news-panel {
+  width: 100%;
+  border: 1px solid #d4d4d4;
+  border-radius: 2px;
+  padding: 20px;
+  position: relative;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.175);
+  background-color: #f8f8f8;
+  margin-bottom: 20px;
+}
+
+.sub-header-home {
+  margin-top:0px;
+}
+
+.home-small {
+  font-size:75%;
+}

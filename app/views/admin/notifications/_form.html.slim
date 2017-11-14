@@ -1,0 +1,8 @@
+= simple_form_for([:admin, @notification], class: 'form-horizontal') do |f|
+  .form-group
+    = f.input :title, as: :string, input_html: { class: 'form-control' }
+  .form-group
+    = f.input :body, as: :text, input_html: { class: 'form-control', rows: 8 }
+  .checkbox
+    = f.input :is_active, as: :boolean
+  = f.submit class: 'button btn btn-large btn-success'

@@ -1,0 +1,25 @@
+.col-md-12
+  .page-header
+    h1 Notifications #{link_to 'create', new_admin_notification_path, class: 'btn btn-xs btn-success sans-serif'}
+
+  .container-fluid
+    .row
+      .table-responsive
+        table.table.table-striped.table-condensed
+          thead
+            tr
+              th Title
+              th Body
+              th Status
+              th.actions
+
+          tbody
+            - @notifications.each do |notification|
+              tr
+                td = notification.title
+                td = notification.body
+                td = notification.status
+                td.text-right
+                  nobr
+                    =' link_to 'Edit', edit_admin_notification_path(notification), class: 'btn btn-xs btn-primary'
+                    = link_to 'Delete', admin_notification_path(notification), method: :delete, class: 'btn btn-xs btn-primary'

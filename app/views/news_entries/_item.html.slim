@@ -1,0 +1,30 @@
+ruby:
+  enable_actions ||= false
+
+li id="news-entry-#{news_entry.id}"
+  .timeline-panel
+    .timeline-heading
+      h4.news-title
+        - if enable_actions
+          small.pull-right
+            - if news_entry.internal?
+              - if can?(:access, Action.new(:news, :edit))
+                = link_to 'Edit', edit_news_path(news_entry), class: 'text-warning'
+              - if can?(:access, Action.new(:news, :delete))
+                '  |
+                = link_to 'Delete', news_path(news_entry), method: :delete, class: 'text-danger'
+        - if news_entry.external_link?
+          = link_to news_entry.title, news_entry.link, target: :blank
+        - else
+          = link_to news_entry.title, news_path(news_entry.id)
+    .timeline-body
+      - if news_entry.external? && news_entry.image.present?
+        .attached-image
+          = link_to news_entry.link, target: :blank do
+            = image_tag news_entry.image, class: 'img-thumbnail'
+
+      p = news_entry.short_body
+      p.timestamp
+        span.date.text-muted.small
+          i.glyphicon.glyphicon-time
+          '  #{news_entry.date}

@@ -1,0 +1,38 @@
+#gallery-show.col-md-12
+  h1 #{link_to 'Resources', resources_path}: #{@gallery.name}
+  .gallery-toolbar.clearfix
+    ul.nav.nav-pills.pull-left#folders-list
+      /li
+      /li#manage-folders
+        /a.btn href='#!manager'
+          /span.glyphicon.glyphicon-cog
+          /|  Manage Folders
+    #search-container.pull-right
+      #sort-link
+      /form.form-inline.text-right
+        .form-group
+          input#search.form-control type="text" name="search" placeholder='Search'
+        button.btn.btn-default type="submit" Search
+
+  .pagination-container.row.text-center
+  #assets-list.row
+  h3.text-center
+    - if @folders.empty?
+      | This gallery doesn't have any folders yet.
+  .pagination-container.row.text-center
+
+javascript:
+  $(function(){
+    window.DMC.collection = new DMC.Collections.Folders(#{{ @folders.to_json }}, { gallery_id: #{@gallery.id} });
+  });
+  $(function(){
+    window.myGalleries = #{ raw [].as_json };
+  })
+
+coffee:
+  $ ->
+    Backbone.history.stop()
+    window.DMC.route = new DMC.Routers.Frontend.Folder(collection: window.DMC.collection)
+    foldersView = new DMC.Views.Shared.Folder.List(collection: window.DMC.collection).render()
+    Backbone.history.start()
+    window.DMC.route.showFirstFolder()

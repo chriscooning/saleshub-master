@@ -1,0 +1,14 @@
+.col-md-8.col-md-offset-2
+  .page-header
+    h1
+      ' Taylor News
+      - if can?(:access, Action.new(:news, :create))
+        small = link_to 'Create News Entry', new_news_path, class: 'btn btn-success btn-xs btn-success sans-serif'
+
+  ul#internal-news.timeline data-realtime="true"
+    = render partial: 'news_entries/items', locals: { news_entries: @internal_news_entries, enable_actions: true }
+
+  javascript:
+    $(function() {
+      window.initInfiniteScroll('/news/internal', #{@total_count}, 'ul.timeline');
+    });

@@ -1,0 +1,70 @@
+.col-md-12
+  .page-header
+    h1
+      | Manage Messages
+      =< link_to 'Create message', new_manage_message_path, class: 'btn btn-xs btn-success sans-serif'
+
+  ul.nav.nav-tabs
+    - if can?(:access, Action.or(:messages, [:update, :delete]))
+      li class="#{ @messages_type.eql?(:messages) && 'active' }"
+        = link_to 'Customer Messaging', customer_messaging_manage_messages_path
+    - if can?(:access, Action.or(:briefings, [:update, :delete]))
+      li class="#{ @messages_type.eql?(:briefings) && 'active' }"
+        = link_to 'Briefings', briefings_manage_messages_path
+    /- if can?(:access, Action.or(:whats_ups, [:update, :delete]))
+      li class="#{ @messages_type.eql?(:whats_ups) && 'active' }"
+        = link_to "What's Ups", whats_ups_manage_messages_path
+  .tab-content
+    .tab-pane.active
+      .table-responsive.manage-messages-list
+        table.table.table-striped
+          thead
+            tr
+              - if can?(:access, Action.new(@messages_type, :reorder))
+                th
+              th Attachment
+              th Title
+              th Body
+              th Author
+              - unless @messages_type.eql?(:whats_ups)
+                th Status
+                th Is featured
+              th Created At
+              th
+          tbody.sortable
+            = render partial: 'row', collection: @messages, as: :message
+
+      .pagination
+        = paginate @messages
+
+  javascript:
+    $('tbody.sortable').sortable({
+      cursor: 'move',
+      axis: 'y',
+      handle: '.handle-for-sorting',
+      helper: function (event, element) {
+        return $(element).clone().addClass('active');
+      },
+      update: function (event, element) {
+        $('tbody.sortable').sortable('disable');
+        $.ajax({
+          url: '#{reorder_manage_messages_path}',
+          type: 'POST',
+          data: {
+            _method: 'put',
+            ids: $('tbody.sortable').sortable('toArray', { attribute: 'data-id' }),
+            position: {
+             from: #{@messages.from},
+             to: #{@messages.to}
+            }
+          },
+          complete: function (xhr, status) {
+            $('tbody.sortable').sortable('enable');
+          }
+        });
+      }
+     });
+    $('tr.message').each(function(index, item){
+      new Message($(item));
+    });
+

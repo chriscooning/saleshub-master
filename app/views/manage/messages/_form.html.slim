@@ -1,0 +1,186 @@
+ruby:
+  unless @message.persisted?
+    default_message_types = [['Customer Messaging', Message::Types::BASIC], ['Briefing', Message::Types::BRIEFING]]
+    accessible_message_types = []
+    if current_user.is_admin?
+      accessible_message_types = default_message_types
+    elsif current_user.is_manager?
+      if can?(:access, Action.or(:messages, [:create]))
+        accessible_message_types << default_message_types[0]
+      end
+      accessible_message_types << default_message_types[1]
+    else
+      if can?(:access, Action.or(:messages, [:create]))
+        accessible_message_types << default_message_types[0]
+      end
+      if can?(:access, Action.or(:briefings, [:create]))
+        accessible_message_types << default_message_types[1]
+      end
+    end
+  end
+
+= simple_form_for([:manage, @message], class: 'form-horizontal') do |f|
+  - unless @message.persisted?
+    .form-group
+      = f.input :message_type, type: :select, input_html: { class: 'form-control' }, required: true, include_blank: false, collection: accessible_message_types
+  .form-group
+    = f.input :title, as: :string, input_html: { class: 'form-control' }
+  .form-group
+    = f.label :body
+    = f.bootsy_area :body, editor_options: { alert_unsaved: false }, class: 'form-control', rows: '7'
+  .form-group
+    label> Gallery
+    small = link_to 'Delete', '#', class: 'delete gallery'
+    .jumbotron.fileinput-button#image-uploader-area
+      p.text-center style="margin-bottom: 0;" Drag & Drop file here or Click & Select file from computer
+      input#image-uploader type="file"
+  .form-group.clearfix#attached-gallery
+    = hidden_field_tag :gallery_id, @message.gallery ? @message.gallery.id : 'new'
+    - if @message.gallery.present?
+      - @message.gallery.images.each do |image|
+        .image data-url="#{message_gallery_image_path(@message.gallery, image)}"
+          a.close.delete &times;
+          =' image_tag image.file.thumbnail.url, class: 'img-thumbnail', alt: ''
+
+  .checkbox.additional
+    = f.input :is_anonymous
+  .checkbox.additional
+    = f.input :is_published
+  .form-group.checkbox.additional
+    = f.input :is_featured
+  = f.submit 'Update Message', class: 'button btn btn-large btn-success'
+
+javascript:
+  $(function(){
+    var $uploader = $('#image-uploader');
+    var $overlay = $('#image-uploader-overlay');
+    var $gallery_id = $('[name="gallery_id"]');
+    var $gallery = $('#attached-gallery');
+
+    function deleteButtonUpdater(){
+      var $button = $('.gallery.delete');
+      var is_id_present = /\d+/.test($gallery_id.val());
+      var is_images_exists = ($gallery.find('.image').size() > 0);
+
+      if (is_id_present && is_images_exists) {
+        $button.show();
+      } else {
+        $button.hide();
+      }
+    }
+
+    $gallery_id.bind('change', function(){
+      $('#image-uploader').fileupload(
+        'option',
+        'url',
+        '/messages/galleries/' + $gallery_id.val() + '/images'
+      );
+    });
+
+    deleteButtonUpdater();
+
+    $(document).on('click', '.gallery.delete:not(.disabled)', function(event){
+      event.preventDefault();
+      var $button = $(event.target);
+      $button.addClass('disabled');
+      $.ajax({
+        url: '/messages/galleries/' + $gallery_id.val(),
+        type: 'post',
+        data: {
+          _method: 'delete'
+        },
+        success: function(){
+          $button.hide();
+          $gallery_id.val('new');
+          $gallery_id.trigger('change');
+          $gallery.find('.image').fadeOut(function(){
+            $(this).remove();
+            deleteButtonUpdater();
+          })
+        },
+        complete: function(){
+          $button.removeClass('disabled');
+        }
+      })
+    });
+
+    $(document).on('click', '.image a.delete:not(.disabled)', function(event){
+      event.preventDefault();
+      var $button = $(event.target);
+      var $image = $button.parent('.image');
+
+      $button.addClass('disabled');
+      $.ajax({
+        url: $image.data('url'),
+        type: 'post',
+        data: {
+          _method: 'delete'
+        },
+        success: function(){
+          $image.fadeOut(function(){
+            $(this).remove();
+            deleteButtonUpdater();
+           })
+        },
+        complete: function(){
+          $button.removeClass('disabled');
+        }
+      })
+    });
+
+    function fileuploadFormData() {
+      var data = #{ @message.persisted? ? "{message_id: #{@message.id}}" : '{}' };
+      data[$('[name="csrf-param"]').attr('content')] = $('[name="csrf-token"]').attr('content');
+      return data;
+    }
+
+    $uploader.fileupload({
+      autoUpload: true,
+      dataType: 'json',
+      formData: fileuploadFormData(),
+      singleFileUploads: false,
+      url: '/messages/galleries/' + $gallery_id.val() + '/images'
+    });
+
+    $uploader.bind('fileuploadsubmit', function(){
+      $overlay.show();
+    });
+
+    $uploader.bind('fileuploadalways', function(){
+      $overlay.hide();
+    });
+
+    $uploader.bind('fileuploaddone', function(e, data){
+      if (! /\d+/.test($gallery_id.val()) ) {
+        if (! _.isUndefined(data.result.results[0]) ) {
+          $gallery_id.val(data.result.results[0].image.gallery_id)
+          $gallery_id.trigger('change');
+          deleteButtonUpdater();
+        }
+      }
+      _.each(data.result.results, function(item){
+        var image = item.image
+        var $box = $('<div />', { class: 'image', data: { url: image.url } });
+        var $close = $('<a />', { class: 'close delete' }).html('&times;');
+        var $image = $('<img />', { class: 'img-thumbnail', src: image.file.thumbnail_url });
+
+        $gallery.append($box.append($close).append($image));
+      });
+
+      deleteButtonUpdater();
+    });
+
+    function toggleAdditionalAttributes(){
+      if ( $('#message_message_type').val() == '2' ) {
+        $('.additional').hide()
+        $('.additional :input').attr('disabled', true)
+      } else {
+        $('.additional').show()
+        $('.additional :input').attr('disabled', false)
+      }
+    }
+
+    toggleAdditionalAttributes();
+
+    $('#message_message_type').change(toggleAdditionalAttributes);
+  })

@@ -1,0 +1,57 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost.localdomain:3001/api/v1/galleries.json
+    body:
+      encoding: US-ASCII
+      string: user_token=LUCBv-UpARNnBKPUg28D
+    headers:
+      Accept:
+      - "*/*; q=0.5, application/xml"
+      Accept-Encoding:
+      - gzip, deflate
+      Content-Length:
+      - '31'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Ua-Compatible:
+      - chrome=1
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - "\"35401a146e110399436620a05aa43863\""
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Set-Cookie:
+      - request_method=GET; path=/
+      X-Request-Id:
+      - d6747ef1-95c3-460e-9e37-8c57a5efb72d
+      X-Runtime:
+      - '0.036506'
+      Connection:
+      - close
+      Server:
+      - thin 1.6.0 codename Greek Yogurt
+    body:
+      encoding: UTF-8
+      string: "[{\"id\":3,\"name\":\"Example User's gallery\"},{\"id\":5,\"name\":\"New
+        gallery\"}]"
+    http_version: 
+  recorded_at: Thu, 27 Feb 2014 15:42:27 GMT
+recorded_with: VCR 2.8.0

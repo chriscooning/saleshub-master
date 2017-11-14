@@ -1,0 +1,80 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost.localdomain:3001/api/v1/assets.json
+    body:
+      encoding: US-ASCII
+      string: gallery_id=3&folder_id=3&page=1&per=16&user_token=LUCBv-UpARNnBKPUg28D
+    headers:
+      Accept:
+      - "*/*; q=0.5, application/xml"
+      Accept-Encoding:
+      - gzip, deflate
+      Content-Length:
+      - '70'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Ua-Compatible:
+      - chrome=1
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - "\"c255a7a3e77531013d08263727d40ae3\""
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Set-Cookie:
+      - request_method=GET; path=/
+      X-Request-Id:
+      - 42432149-4cbf-4a50-9a56-570a4b7ca68a
+      X-Runtime:
+      - '1.008850'
+      Connection:
+      - close
+      Server:
+      - thin 1.6.0 codename Greek Yogurt
+    body:
+      encoding: UTF-8
+      string: "{\"total_count\":4,\"collection\":[{\"id\":12,\"title\":\"Rainbow\",\"description\":\"Lorem
+        ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+        eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+        sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"thumb_url\":\"http://s3.amazonaws.com/dmc_new_dev/example-39bd1c792dafe566/images/12/small/image06.jpg?AWSAccessKeyId=AKIAIRJELW3QWK4PFIBQ\\u0026Expires=1393594333\\u0026Signature=jkVTzA2Me0DPV3Nxp1T7DyqkeSw%3D\\u0026response-content-disposition=attachment%3B\",\"medium_url\":\"http://s3.amazonaws.com/dmc_new_dev/example-39bd1c792dafe566/images/12/medium/image06.jpg?AWSAccessKeyId=AKIAIRJELW3QWK4PFIBQ\\u0026Expires=1393594333\\u0026Signature=uFtKxxMHmi78PmFkUJEFALowJCQ%3D\\u0026response-content-disposition=attachment%3B\",\"asset_type\":\"image\",\"document_type\":null},{\"id\":11,\"title\":\"Sunset\",\"description\":\"Lorem
+        ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+        eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+        sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"thumb_url\":\"http://s3.amazonaws.com/dmc_new_dev/example-39bd1c792dafe566/images/11/small/image04.jpg?AWSAccessKeyId=AKIAIRJELW3QWK4PFIBQ\\u0026Expires=1393594333\\u0026Signature=mUkdkkHH%2BG5GvMR7QF%2FvdHrHbLU%3D\\u0026response-content-disposition=attachment%3B\",\"medium_url\":\"http://s3.amazonaws.com/dmc_new_dev/example-39bd1c792dafe566/images/11/medium/image04.jpg?AWSAccessKeyId=AKIAIRJELW3QWK4PFIBQ\\u0026Expires=1393594333\\u0026Signature=pDBjNSU87h84Om%2Fiw37U90YMLrQ%3D\\u0026response-content-disposition=attachment%3B\",\"asset_type\":\"image\",\"document_type\":null},{\"id\":10,\"title\":\"Eclipse\",\"description\":\"Lorem
+        ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+        eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+        sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"thumb_url\":\"http://s3.amazonaws.com/dmc_new_dev/example-39bd1c792dafe566/images/10/small/image08.jpg?AWSAccessKeyId=AKIAIRJELW3QWK4PFIBQ\\u0026Expires=1393594333\\u0026Signature=XhES12gGi24crrQJMcSo1ApNKGk%3D\\u0026response-content-disposition=attachment%3B\",\"medium_url\":\"http://s3.amazonaws.com/dmc_new_dev/example-39bd1c792dafe566/images/10/medium/image08.jpg?AWSAccessKeyId=AKIAIRJELW3QWK4PFIBQ\\u0026Expires=1393594333\\u0026Signature=h6jqK8ONiFb%2FFyRj0IXKV%2FnyyIE%3D\\u0026response-content-disposition=attachment%3B\",\"asset_type\":\"image\",\"document_type\":null},{\"id\":9,\"title\":\"Twilight\",\"description\":\"Lorem
+        ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+        eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+        sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"thumb_url\":\"http://s3.amazonaws.com/dmc_new_dev/example-39bd1c792dafe566/images/9/small/image10.jpg?AWSAccessKeyId=AKIAIRJELW3QWK4PFIBQ\\u0026Expires=1393594333\\u0026Signature=XcwlPJQa6Pa1PJ0W80S984zyiUQ%3D\\u0026response-content-disposition=attachment%3B\",\"medium_url\":\"http://s3.amazonaws.com/dmc_new_dev/example-39bd1c792dafe566/images/9/medium/image10.jpg?AWSAccessKeyId=AKIAIRJELW3QWK4PFIBQ\\u0026Expires=1393594333\\u0026Signature=FzAYrwa9PCQQ7yJG%2Ff2s59cM1sc%3D\\u0026response-content-disposition=attachment%3B\",\"asset_type\":\"image\",\"document_type\":null}]}"
+    http_version: 
+  recorded_at: Fri, 28 Feb 2014 13:17:13 GMT
+recorded_with: VCR 2.8.0

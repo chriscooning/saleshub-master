@@ -1,0 +1,17 @@
+ruby:
+  rules = Rule.where(is_allow: true).includes(:operand, :operation)
+  globals = rules.select(&:is_global)
+  locals = rules.reject(&:is_global)
+  operations = Operation.all
+
+= simple_form_for [:manage, @role], class: 'form-horizontal' do |f|
+  .form-group
+    = f.input :presentation, input_html: { class: 'form-control' }
+  .form-group
+    h3 Global Rules
+    = render 'rules', operations: operations, globals: globals
+  .form-group
+    h3 Local Rules
+    = render 'rules', operations: operations, globals: locals
+
+  = f.submit class: 'button btn btn-large btn-success'

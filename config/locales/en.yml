@@ -1,0 +1,17 @@
+en:
+  activerecord:
+    attributes:
+      message:
+        is_anonymous: 'hide author'
+
+  helpers:
+    submit:
+      role:
+        create: 'Save Role'
+        update: 'Update Role'
+      message:
+        create: 'Save Message'
+        update: 'Update Message'
+      notification:
+        create: 'Save Notification'
+        update: 'Update Notification'

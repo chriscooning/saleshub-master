@@ -1,0 +1,14 @@
+.sans-serif {
+  font-family: sans-serif;
+}
+
+.btn {
+  &.sans-serif {
+    margin-top: 9px;
+  }
+}
+
+h1, h2, h3 {
+  font-family: 'BebasNeue', sans-serif;
+  text-transform: uppercase;
+}

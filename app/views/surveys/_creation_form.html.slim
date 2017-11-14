@@ -1,0 +1,39 @@
+= simple_form_for(@survey, url: home_create_survey_path, method: :post, :'class' => 'billingform form-horizontal') do |f|
+  .row
+    .col-md-6
+      .form-group
+        = f.input :customer_name, as: :string, input_html: { class: 'form-control' }
+    .col-md-6
+      .form-group.star-rating
+        label.control-label How did the interaction go?
+        .clear
+        #stars class="starrr"
+        .help-block
+          ' You gave a rating of
+          span#count< 0
+          '  star(s)
+        = f.input :last_interaction_rating, :as => :hidden, :input_html => { id: 'last_interaction_rating', value: "0" }
+        - if @survey.errors[:last_interaction_rating].present?
+          span.error = @survey.errors[:last_interaction_rating].join(', ')
+    .col-md-12
+      .form-group
+        = f.input :summary, input_html: { class: 'form-control', rows: "7" }
+      .form-actions
+        = f.submit 'Save Survey Entry', class: 'button btn btn-large btn-success'
+
+javascript:
+  $( document ).ready(function() {
+
+    $(function() {
+      return $(".starrr").starrr();
+    });
+
+    $('#stars').on('starrr:change', function(e, value){
+      $('#count').html(value);
+      $('#last_interaction_rating').val(value)
+    });
+
+    $('#stars-existing').on('starrr:change', function(e, value){
+      $('#count-existing').html(value);
+    });
+  });

@@ -1,0 +1,25 @@
+table.table-striped.table-condensed
+  thead
+    th
+    - operations.each do |operation|
+      th
+        = operation.presentation
+  tbody
+    - rules.group_by(&:operand).each do |operand, rules|
+      tr
+        td
+          = operand.presentation
+        - operations.each do |operation|
+          td
+            = hidden_field_tag "user[rules][#{scope}][#{operand.code}][#{operation.code}]", 0
+            ruby:
+              rule = rules.detect{|rule| rule.operation_id.eql?(operation.id) }
+            - if rule.present?
+              ruby:
+                is_allowed_for_role = @user.role.rule_ids.include?(rule.id)
+                is_allowed_for_user = @user.rule_ids.include?(rule.id)
+                is_deny_for_user = @user.rule_ids.include?(rule.opposite.id)
+
+                is_allowed = is_allowed_for_user || is_allowed_for_role && !is_deny_for_user
+
+              = check_box_tag "user[rules][#{scope}][#{operand.code}][#{operation.code}]", 1, is_allowed

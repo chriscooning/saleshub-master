@@ -1,0 +1,111 @@
+doctype html
+html
+  head
+    title = content_for?(:title) ? yield(:title) : 'Taylor Farms Sales HUB'
+    meta charset="utf-8"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+    meta name="description" content="#{content_for?(:description) ? yield(:description) : 'Saleshub'}"
+    = render partial: 'layouts/rollbar'
+    link href="#{image_path 'favicon.png'}" rel="shortcut icon"
+    link href='//fonts.googleapis.com/css?family=Anton' rel='stylesheet'
+    == stylesheet_link_tag "application", :media => "all", "data-turbolinks-track" => true
+
+    == javascript_include_tag "application", "data-turbolinks-track" => true
+    == javascript_include_tag "//jwpsrv.com/library/ZZxAqPoYEeKnJBIxOUCPzg.js"
+    == javascript_include_tag "//use.typekit.net/fln7pmf.js"
+    script type="text/javascript" try{Typekit.load();}catch(e){}
+    == csrf_meta_tags
+    javascript:
+      Flash.audio_file_url = '#{audio_url('notification.mp3')}';
+    - if user_signed_in?
+      == javascript_include_tag "#{configatron.faye.url}/client.js"
+      javascript:
+        window.faye = new Faye.Client('#{configatron.faye.url}');
+        window.faye.subscribe('/channels/#{configatron.faye.channels.flashes}', function(data) {
+          if ( data.is_active && !data.is_deleted ) {
+            Flash.notice(data.title, data.content, data.id, '/notifications/' + data.id + '/close');
+          } else {
+            Flash.delete(data.id)
+          }
+        });
+
+        function processMessage($scope, data) {
+          if (data.html) {
+            var id = $(data.html).data('id');
+            if ($('#message-' + id).length > 0) {
+              $scope.find('#message-' + id).replaceWith(data.html)
+            } else {
+              $scope.prepend(data.html);
+            }
+          } else if (data.json) {
+            if (data.json.is_unpublished || data.json.is_deleted) {
+              $scope.find('#message-' + data.json.id).fadeOut(function(item){ $(item).remove() })
+            }
+          }
+        }
+
+        window.faye.subscribe('/channels/#{configatron.faye.channels.messages}', function(data) {
+          if( $('ul#messages').data('realtime') ) {
+            processMessage($('ul#messages'), data);
+          }
+        });
+        window.faye.subscribe('/channels/#{configatron.faye.channels.whats_ups}', function(data) {
+          if( $('ul#whatsups').data('realtime') ) {
+            processMessage($('ul#whatsups'), data);
+          }
+        });
+        window.faye.subscribe('/channels/#{configatron.faye.channels.briefings}', function(data) {
+          if( $('ul#briefings').data('realtime') ) {
+            processMessage($('ul#briefings'), data);
+          }
+        });
+
+        window.faye.subscribe('/channels/#{configatron.faye.channels.news}', function (data) {
+          var entry = data.json;
+          var $external = $('ul#external-news');
+          var $internal = $('ul#internal-news');
+
+          console.log(entry)
+
+          if ( entry.is_external && $external.data('realtime') ) {
+            var $scope = $external;
+          } else if ( !entry.is_external && $internal.data('realtime') ) {
+            var $scope = $internal;
+          }
+
+          if ( !$scope ) {
+            return;
+          }
+
+          if ( entry.is_destroyed ) {
+            $scope.find('#news-entry-' + entry.id).fadeOut(function(){
+              $(this).remove();
+            });
+
+            return;
+          }
+
+          var html = JST['templates/news_item']({entry: entry});
+
+          if ( $scope.find('#news-entry-' + entry.id).length > 0 ) {
+            $scope.find('#news-entry-' + entry.id).replaceWith(html);
+          } else {
+            $scope.prepend(html);
+          }
+        });
+  body
+    == render 'shared/mobile_menu'
+    header
+      == render 'layouts/navigation'
+    .main[role="main"]
+      .container-fluid.position-relative
+        .row
+          == render 'shared/sidebar'
+          .col-sm-12.col-md-10.main-content
+            == render 'layouts/messages'
+            == yield
+      .footer
+        .col-md-2.hidden-sm.hidden-xs
+        .col-md-10.col-sm-12
+          .text-muted
+            == render 'shared/footer'

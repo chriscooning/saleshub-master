@@ -1,0 +1,101 @@
+.home-header  
+  = image_tag 'saleshub-header.jpg', width: 497, height: 80, alt: ''
+
+- if can?(:access, Action.new(:messages, :read))
+  .col-md-8.col-md-offset-2
+    h2 Customer Messaging
+    ul#messages.timeline data-realtime="true"
+      - @messages.each_with_index do |message, i|
+        = render partial: 'messages/item', locals: { msg: message, is_even: i.even? }
+    .clearfix
+      = link_to 'View All', messages_path, class: 'text-muted'
+
+- if can?(:access, Action.new(:briefings, :read))
+  .col-md-8.col-md-offset-2
+    h2 Briefings
+    ul#briefings.timeline data-realtime="true"
+      - @briefings.each_with_index do |message, i|
+        = render partial: 'briefings/item', locals: { msg: message, is_even: i.even? }
+    .clearfix
+      = link_to 'View All', briefings_path, class: 'text-muted'
+
+/- if can?(:access, Action.new(:whats_ups, :read))
+  .col-md-8.col-md-offset-2
+    h2
+      | What's Up
+      - if can?(:access, Action.new(:whats_ups, :create))
+        =< link_to 'create message', new_whats_up_path, id: 'toggle-new-whats-up-container', class: 'btn btn-xs btn-success sans-serif'
+    #new-whats-up-container style="display: none;"
+      = render 'form'
+    ul#whatsups.timeline data-realtime="true"
+      - @whats_ups.each_with_index do |message, i|
+        = render partial: 'whats_ups/item', locals: { msg: message, is_even: i.even? }
+    .clearfix
+      = link_to 'View All', whats_ups_path, class: 'text-muted'
+
+  /.col-md-8.col-md-offset-2
+   / - if can?(:access, Action.new(:surveys, :create))
+      /h2.sub-header Survey
+      /.container-fluid
+        /= render partial: 'surveys/creation_form', locals: { survey: @survey }
+    /- if can?(:access, Action.new(:surveys, :read))
+      /= link_to 'Show All Past Surveys', surveys_path, class: 'btn btn-primary btn-lg btn-margin'
+
+- if can?(:access, Action.new(:news, :read))
+
+  .col-md-8.col-md-offset-2
+    hr.home-section
+    div
+      h3.sub-header.sub-header-home
+        | Industry News
+      ul#external-news.timeline data-realtime="true"
+        = render partial: 'news_entries/items', locals: { news_entries: @external_news_entries }
+      = link_to 'View All', external_news_index_path, class: 'text-muted'
+      br
+      br
+    div
+      h3.sub-header.sub-header-home
+        | Taylor Farms News
+      ul#internal-news.timeline data-realtime="true"
+        = render partial: 'news_entries/items', locals: { news_entries: @internal_news_entries }
+      = link_to 'View All', internal_news_index_path, class: 'text-muted'
+
+coffee:
+  $('#toggle-new-whats-up-container:not(:disabled)').click (event) ->
+    event.preventDefault()
+    $button = $(event.target)
+
+    $button.attr('disabled', true)
+
+    $('#new-whats-up-container').slideToggle 'slow', ->
+      $button.attr('disabled', false)
+      if $('#new-whats-up-container').is(':visible')
+        $button.text('close form')
+      else
+        $button.text('create message')
+
+javascript:
+  $('#new-whats-up-container').on('submit', 'form', function(event){
+    event.preventDefault()
+    $.ajax({
+      url: '/whats_ups',
+      type: 'post',
+      dataType: 'json',
+      data: {
+        message: {
+          title: $('#message_title').val().trim(),
+          body: $('#message_body').val().trim()
+         }
+      },
+      statusCode: {
+        201: function(data){
+          $('#new_message').replaceWith(data.html);
+          $('#toggle-new-whats-up-container').trigger('click')
+        },
+        422: function(jqXHR){
+          $('#new_message').replaceWith(jqXHR.responseJSON.html);
+        }
+      }
+    })
+    return false;
+  });

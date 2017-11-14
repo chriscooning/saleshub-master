@@ -1,0 +1,37 @@
+#sidr.sidr
+  .sidr-inner
+    ul.nav
+      li#dashboard
+        = link_to root_path, id: 'dashboard', title:'Dashboard' do
+          span.glyphicon.glyphicon-dashboard
+          span.sans-serif  Dashboard
+        ul.sub-nav.nav
+          = navigation_link_to messages_path, title: 'Messages' do
+            span.glyphicon.glyphicon-envelope
+            span.sans-serif  Messages
+          /= navigation_link_to surveys_path, id: 'surveys', title: 'Survey' do
+            span.glyphicon.glyphicon-pencil
+            span.sans-serif  Survey
+          = navigation_link_to internal_news_index_path, id: 'internal-news', title: 'TF News' do
+            span.glyphicon.glyphicon-book
+            span.sans-serif  TF News
+          = navigation_link_to external_news_index_path, id: 'external-news', title: 'Industry News' do
+            span.glyphicon.glyphicon-book
+            span.sans-serif  Industry News
+      = navigation_link_to resources_path, id: 'resources', title: 'Resources' do
+        span.glyphicon.glyphicon-wrench
+        span.sans-serif  Resources
+      /= navigation_link_to '#', id: 'calculators', title: 'Calculators' do
+        span.glyphicon.glyphicon-tasks
+        span.sans-serif  Calculators
+
+      - if can?(:access, ::Services::Users.new.build)
+        = navigation_link_to 'Users', manage_users_path
+      - if can?(:access, Action.new(:messages, :read)) && can?(:access, Action.or(:messages, [:create, :edit, :delete]))
+        = navigation_link_to 'Manage Messages', manage_messages_path
+      - if can?(:access, Action.new(:notifications, :read)) && can?(:access, Action.or(:notifications, [:create, :edit, :delete]))
+        = navigation_link_to 'Notifications', admin_notifications_path
+      - if can?(:access, Action.new(:configuration, :read)) && can?(:access, Action.new(:configuration, :edit))
+        = navigation_link_to 'Configuration', edit_admin_configuration_path
+
+      = navigation_link_to 'Logout', destroy_user_session_path, method: 'delete'

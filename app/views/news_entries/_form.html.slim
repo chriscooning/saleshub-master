@@ -1,0 +1,7 @@
+- url = @news_entry.persisted? ? news_path(@news_entry) : news_index_path
+= simple_form_for(@news_entry, url: url, :'class' => 'form-horizontal') do |f|
+  .form-group
+    = f.input :title, as: :string, input_html: { class: 'form-control' }
+  .form-group
+    = f.input :body, input_html: { class: 'form-control', rows: "7" }
+  = f.submit 'Save News Entry', class: 'button btn btn-large btn-success'

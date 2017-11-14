@@ -1,0 +1,42 @@
+ruby:
+  classes = []
+  classes << 'info' if message.is_featured?
+  classes << 'danger' if message.errors.present?
+tr.message id="message-#{message.id}" data-id="#{message.id}" data-url="#{manage_message_path(message)}" class="#{ classes.join(' ') }"
+  - if can?(:access, Action.new(message.type_name, :reorder))
+    td style="vertical-align: middle;"
+      span.glyphicon.glyphicon-sort.handle-for-sorting
+  td.image
+    - if message.gallery.present? && message.gallery.images.present?
+      ruby:
+        primary = message.gallery.images.first
+        secondary = message.gallery.images.to_a.from(1)
+      = link_to primary.file.url, target: :blank, class: 'fancybox', rel: "message-#{message.id}-gallery" do
+        = image_tag primary.file.thumbnail.url, class: 'img-thumbnail'
+      - secondary.each do |image|
+        = link_to image.file.url, target: :blank, class: 'fancybox hide', rel: "message-#{message.id}-gallery" do
+          = image_tag image.file.thumbnail.url, class: 'img-thumbnail'
+  td = message.title
+  td = message.body
+  td = message.author
+  - unless @messages_type.eql?(:whats_ups)
+    td.col-sm-1
+      - if can?(:access, Action.new(message.type_name, :edit))
+        = select_tag 'message[status]', options_for_select(['Draft', 'Published'], message.status), class: 'form-control'
+      - else
+        = message.status
+    td.col-sm-1
+      - if can?(:access, Action.new(message.type_name, :edit)) && !current_user.is_user?
+        ruby:
+          classes = ['form-group']
+          classes << 'has-error' if message.errors[:is_featured].present?
+        = content_tag :div, class: classes do
+          = check_box_tag 'message[is_featured]', true, message.is_featured, class: 'form-control'
+      - else
+        = message.is_featured? ? 'Yes' : 'No'
+  td = message.created_at
+  td.text-right
+    - if can?(:access, Action.new(message.type_name, :edit)) && (!current_user.is_user? || message.created_by?(current_user))
+      span.action = link_to 'Edit', edit_manage_message_path(message)
+    - if can?(:access, Action.new(message.type_name, :delete)) && (!current_user.is_user? || message.created_by?(current_user))
+      span.action = link_to 'Delete', manage_message_path(message), method: :delete, data: { confirm: 'Are you sure?' }

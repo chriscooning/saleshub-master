@@ -1,0 +1,22 @@
+ruby:
+  rules = Rule.includes(:operand, :operation).all
+  globals = rules.select(&:is_global)
+  locals = rules.reject(&:is_global)
+  operations = Operation.all
+
+.col-md-12
+  .page-header
+    h1 User permissions
+    h3 = link_to @user.name, manage_user_path(@user)
+  .container-fluid
+      .row
+        .col-md-10
+          = simple_form_for @user, url: manage_user_permissions_path(@user), class: 'form-horizontal' do |f|
+            .form-group
+              h3 Global Rules
+              = render 'rules', operations: operations, rules: globals, scope: :global
+            .form-group
+              h3 Local Rules
+              = render 'rules', operations: operations, rules: locals, scope: :local
+
+            = f.submit class: 'button btn btn-large btn-success'

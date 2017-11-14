@@ -1,0 +1,2 @@
+- messages.each_with_index do |msg, i|
+  = render partial: 'briefings/item', locals: { msg: msg, is_even: i.even? }

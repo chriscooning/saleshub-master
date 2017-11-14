@@ -1,0 +1,16 @@
+table.table-striped.table-condensed
+  thead
+    th
+    - operations.each do |operation|
+      th
+        = operation.presentation
+  tbody
+    - globals.group_by(&:operand).each do |operand, rules|
+      tr
+        td
+          = operand.presentation
+        - operations.each do |operation|
+          td
+            - rule = rules.detect{|rule| rule.operation_id.eql?(operation.id) }
+            - if rule.present?
+              = check_box_tag 'role[rule_ids][]', rule.id, @role.rule_ids.include?(rule.id)

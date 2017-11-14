@@ -1,0 +1,16 @@
+.news-entries {
+  .news-entry {
+    margin: 2em 0 2em 0;
+  }
+}
+
+.news-entry.full {
+  .body {
+    margin-top: 3em;
+    margin-bottom: 3em;
+    font-size: 1.5em;
+  }
+  .info {
+    font-size: 1.25em;
+  }
+}

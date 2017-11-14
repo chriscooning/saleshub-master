@@ -1,0 +1,46 @@
+= form_for comment, url: url do |f|
+  = f.hidden_field :parent_id
+  = f.text_area :content, class: 'form-control'
+  = f.submit 'Submit', class: 'btn btn-primary disabled'
+
+javascript:
+  $(function(){
+    window.parent_id = null;
+    $('#comment_content').keyup(function(){
+      if( $('#comment_content').val().trim().length == 0 ) {
+        $('#new_comment :submit').addClass('disabled');
+      } else {
+        $('#new_comment :submit').removeClass('disabled');
+      }
+    });
+    $('#new_comment').submit(function(event){
+      event.preventDefault();
+
+      $('#new_comment :submit').val('Submitting...');
+      $('#new_comment :submit').addClass('disabled');
+
+      $.ajax({
+        url: $('#new_comment').attr('action'),
+        type: 'post',
+        dataType: 'json',
+        data: {
+          comment: {
+            content: $('#comment_content').val().trim()
+          },
+          parent_id: window.parent_id
+        },
+        statusCode: {
+          201: function(){
+            $('#comment_content').val('');
+            window.parent_id = null;
+            $('#new_comment :submit').addClass('disabled');
+            $('#new_comment :submit').val('Submit')
+          },
+          422: function(){
+            $('#new_comment :submit').val('Submit')
+            $('#new_comment :submit').removeClass('disabled');
+          }
+        }
+      });
+    });
+  });

@@ -1,0 +1,28 @@
+.col-md-8.col-md-offset-2
+  .page-header
+    h1 Customer Messaging
+
+  .filters
+    = search_form_for @search, class: 'form-horizontal', role: 'form' do |f|
+      .well.well-sm.filter-results
+        .form-group
+          .col-md-2 = f.text_field :title_cont, class: 'form-control', placeholder: 'Title'
+          .col-md-3 = f.text_field :body_cont, class: 'form-control', placeholder: 'Message'
+          .col-md-2 = f.text_field :created_at_gteq, class: 'form-control datepicker', placeholder: 'From', value: @search.created_at_gteq.try(:strftime, '%m/%d/%Y')
+          .col-md-2 = f.text_field :created_at_lteq, class: 'form-control datepicker', placeholder: 'To', value: @search.created_at_lteq.try(:strftime, '%m/%d/%Y')
+          .col-md-3
+            = f.submit 'Search', class: 'btn btn-primary'
+            = link_to 'Reset', messages_path, class: 'btn btn-default'
+
+  ul#messages.timeline data-url="#{ request.fullpath }" data-realtime="#{ @search.conditions.blank? ? true : false }"
+    = render partial: 'items', locals: { messages: @messages }
+
+  javascript:
+    $(function() {
+      $('.datepicker').datepicker({
+        format: 'mm/dd/yyyy',
+        autoclose: true
+      });
+      window.initInfiniteScroll($('.timeline').data('url'), #{@total_count}, '.timeline');
+    });
+    $('input, textarea').placeholder();

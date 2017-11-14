@@ -1,0 +1,40 @@
+nav.navbar.navbar-inverse.navbar-fixed-top role="navigation"
+  .container-fluid
+    .navbar-header
+      a#side-menu-toggle.navbar-toggle.pull-left href="#sidr"
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      /= link_to root_path do
+       / = image_tag 'tffs-logo.png'
+    .collapse.navbar-collapse
+      ul.nav.navbar-nav
+        = navigation_link_to 'Dashboard', root_path
+        - if can?(:access, Role)
+          = navigation_link_to 'Roles', manage_roles_path
+        - if can?(:access, ::Services::Users.new.build)
+          = navigation_link_to 'Users', manage_users_path
+        - if can?(:access, Action.new(:messages, :read)) && can?(:access, Action.or(:messages, [:create, :edit, :delete]))
+          = navigation_link_to 'Messages', manage_messages_path
+        - if can?(:access, Action.new(:notifications, :read)) && can?(:access, Action.or(:notifications, [:create, :edit, :delete]))
+          = navigation_link_to 'Notifications', admin_notifications_path
+        - if can?(:access, Action.new(:configuration, :read)) && can?(:access, Action.new(:configuration, :edit))
+          = navigation_link_to 'Configuration', edit_admin_configuration_path
+      ul.nav.navbar-nav.pull-right
+        /li
+          = link_to '#', class: 'notifications-toggle' do
+            .notification-icon
+              .icon-bar
+              .icon-bar
+              .icon-bar
+              .notices-bubble 3
+            ' Notifications
+        = navigation_link_to 'Sign out', destroy_user_session_path, method: 'delete'
+
+    /.notifications-container
+      ul.notifications-list
+        li.notification = link_to 'New notification text', '#'
+        li.notification = link_to 'New notification text', '#'
+        li.notification = link_to 'New notification text', '#'
+        li.mark = link_to 'Mark all as read', '#'

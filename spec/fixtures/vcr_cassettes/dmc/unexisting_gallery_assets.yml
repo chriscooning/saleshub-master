@@ -1,0 +1,54 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost.localdomain:3001/api/v1/folders.json
+    body:
+      encoding: US-ASCII
+      string: gallery_id=unknown_id&user_token=LUCBv-UpARNnBKPUg28D
+    headers:
+      Accept:
+      - "*/*; q=0.5, application/xml"
+      Accept-Encoding:
+      - gzip, deflate
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Ua-Compatible:
+      - chrome=1
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Type:
+      - application/json; charset=utf-8
+      Cache-Control:
+      - no-cache
+      Set-Cookie:
+      - request_method=GET; path=/
+      X-Request-Id:
+      - 03df5426-9727-49c8-969a-bd270c60116a
+      X-Runtime:
+      - '0.424981'
+      Connection:
+      - close
+      Server:
+      - thin 1.6.0 codename Greek Yogurt
+    body:
+      encoding: UTF-8
+      string: "{\"message\":\"Gallery with this id doesn't exist\"}"
+    http_version: 
+  recorded_at: Thu, 27 Feb 2014 15:41:40 GMT
+recorded_with: VCR 2.8.0

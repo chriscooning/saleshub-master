@@ -1,0 +1,19 @@
+.star-rating {
+  .help-block {
+    font-size: 12px;
+    margin-top: 0;
+  }
+}
+
+.starrr {
+  display: inline-block;
+  line-height: 34px;
+  .glyphicon {
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0 1px;
+    &.icon-star-empty, &.icon-star {
+      color: #FFD119;
+    }
+  }
+}

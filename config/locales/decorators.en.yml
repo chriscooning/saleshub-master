@@ -1,0 +1,7 @@
+en:
+  decorators:
+    access_table_template:
+      create: 'Create'
+      read:   'Read'
+      edit:   'Edit'
+      delete: 'Delete'

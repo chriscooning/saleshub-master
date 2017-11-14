@@ -1,0 +1,51 @@
+.col-md-8.col-md-offset-2
+  .page-header
+    h1 #{link_to 'Briefing', briefings_path}: #{@message.title}
+
+    ul.timeline
+      li
+        .timeline-panel
+          .timeline-body
+            .target-blank
+              = @message.body
+            p.timestamp
+              small.text-muted
+                i.glyphicon.glyphicon-time
+                =' @message.created_at_formatted
+                - unless @message.is_anonymous?
+                  ' by
+                  = @message.author_name
+
+    ul.comments
+      - @message.comments.each do |comment|
+        = render 'comments/comment', comment: comment
+      li.comment.reply
+        h5 Add your comment
+        = render 'comments/form', comment: Comment.new, url: briefing_comments_path(@message)
+  - if @message.token.present?
+    javascript:
+      $(function(){
+        window.faye.subscribe('/channels/#{@message.token}/comments', function(data) {
+          var $html = $(data.html);
+          var parent_id = $html.data('parent-id');
+
+          if( /\d+/.test(parent_id) ) {
+            var $parent = $('li#comment-' + parent_id)
+
+            $parent.children('ul.comments').append($html);
+            if( $parent.find('> .comment-reply > .thread-actions').is(':hidden') ) {
+              $parent.find('> .comment-reply > .thread-actions').css('display' ,'inline');
+            }
+          } else {
+            $('ul.comments li.reply').before($html);
+          }
+        });
+
+        $(document).one('page:update', function(){
+          $(document).one('page:change', function(){
+            window.faye.unsubscribe('/channels/#{@message.token}/comments')
+          });
+        });
+
+        $('.collapse-thread').click();
+      });

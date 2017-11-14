@@ -1,0 +1,24 @@
+li.comment id="comment-#{comment.id}" data-parent-id="#{comment.parent_id}"
+  .meta.timestamp
+    =' comment.created_by.full_name
+    small.text-muted
+      i.glyphicon.glyphicon-time
+      ='< comment.created_at_formatted
+  .comment-text
+    = comment.content
+  - if comment.level < 3
+    .comment-reply
+      = link_to '#', data: { id: comment.id} do
+        span.glyphicon.glyphicon-share
+        '  Reply to comment
+      .thread-actions style="#{ comment.children.empty? ? 'display: none;' : 'display: inline;' }"
+        '  &#151
+        = link_to '#', class: 'collapse-thread' do
+          span.glyphicon.glyphicon-chevron-up
+          '  Collapse thread
+        = link_to '#', class: 'expand-thread', style: 'display: none;' do
+          span.glyphicon.glyphicon-chevron-down
+          '  Expand thread
+    ul.comments
+      - comment.children.each do |children|
+        = render 'comments/comment', comment: children

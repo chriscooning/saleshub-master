@@ -1,0 +1,21 @@
+.page-header
+  h1
+    ' News
+    - if can?(:access, Action.new(:news, :create))
+      small = link_to 'Create News Entry', new_news_entry_path, class: 'btn btn-success btn-xs btn-success sans-serif'
+
+.row.news-entries
+  .col-md-6
+    h3.sub-header Internal
+    .internal-news-entries
+      = render partial: 'news_entries/items', locals: { news_entries: @internal_news_entries }
+  .col-md-6
+    h3.sub-header External
+    .external-news-entries
+      = render partial: 'news_entries/items', locals: { news_entries: @external_news_entries }
+
+- container_map = raw({ ::NewsEntry::Types::EXTERNAL.to_s => '.external-news-entries', NewsEntry::Types::INTERNAL.to_s => '.internal-news-entries' }.to_json)
+javascript:
+  $(function() {
+    window.initInfiniteScrollForNewsEntries("/news_entries", #{@total_count}, #{container_map});
+  });
